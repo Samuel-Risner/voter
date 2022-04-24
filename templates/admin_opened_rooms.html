@@ -1,0 +1,22 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+    Opened Rooms
+{% endblock %}
+
+{% block content %}
+    <p>
+        <form method="post">
+            <input name="room_to_open">
+            <button>Open</button>
+        </form>
+
+        <br>
+
+        {% for room in opened_rooms %}
+            <p>
+                {{ room }}
+            </p>
+        {% endfor %}
+    </p>
+{% endblock %}

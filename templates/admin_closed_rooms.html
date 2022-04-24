@@ -1,0 +1,24 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+    Closed Rooms
+{% endblock %}
+
+{% block content %}
+    <p>
+        <p>
+            <form method="POST">
+                <input type="text" name="room_to_close">
+                <button>Close</button>
+            </form>
+        </p>
+
+        {% for room in evaluated_rooms %}
+            <p>
+                <a href="/evaluated rooms/{{room}}">
+                    {{ room }}
+                </a>
+            </p>
+        {% endfor %}
+    </p>
+{% endblock %}

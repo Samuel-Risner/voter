@@ -1,0 +1,174 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+    Create Room
+{% endblock %}
+
+{% block content %}
+    <form method="post" id="form">
+        <p id="paragraph_for_button_to_add_questions"></p>
+
+        <p>
+            Please only use characters for the room name which can be used for naming files.
+        </p>
+        
+        <p>
+            <input type="text" placeholder="Please enter room name." name="roomname" id="roomname">
+        </p>
+
+        <p id="questions"></p>
+
+        <button id="submit" onclick="on_submit()" class="btn btn-primary" type="submit">
+            Submit
+        </button>
+
+        <input hidden id="ids_list" name="ids_list" value="0">
+    </form>
+
+    <script type="text/javascript">
+        let question_id = 0;    //  does not decrease, to keep question ids unique
+        let question_ids = [];  /*  contains a list of all question ids which are used
+                                    ids are removed from this list when the corresponding
+                                    question is deleted
+                                */ 
+
+        function remove(smth){
+            document.getElementById(smth).remove();
+        }
+
+        function add_question(){
+            question_id ++;
+            let question_id_temp = question_id; /*  since "question_id" would be used in some
+                                                    anonymous functins, which would break some
+                                                    stuff  
+                                                */
+            question_ids.push(question_id_temp);
+
+            /*  paragraph0
+                question0
+                type0
+                numbers0
+            */
+            // paragraph for displaying the question stuff
+            const par = document.createElement("P");
+            par.id = "paragraph" + question_id_temp;
+            // input for question
+            const question_input = document.createElement("INPUT");
+            question_input.type = "text";
+            question_input.name = "question" + question_id_temp;
+            question_input.id = question_input.name;
+            question_input.placeholder = "Please enter question.";
+            // button to remove question
+            const button_remove = document.createElement("BUTTON");
+            button_remove.addEventListener('click', () => {
+                remove("paragraph" + question_id_temp); // defined in base
+                for(let i = 0; i < question_ids.length; i++){ 
+                    if( question_ids[i] == question_id_temp){ 
+                        question_ids.splice(i, 1); 
+                    }
+                }
+                document.getElementById("ids_list").value = question_ids;
+                event.preventDefault();
+            });
+            button_remove.innerHTML = "<span>&times;</span>"; // a nice "x"
+            button_remove.type = "button";
+            // input type for answer
+            const input_type = document.createElement("INPUT");
+            input_type.type = "range";
+            input_type.min = "0";
+            input_type.max = "10";
+            input_type.value = "0";
+            input_type.id = "type" + question_id_temp;
+            input_type.name = input_type.id;
+            // range of numbers for the max value of ^ or for the amount of questions for a 
+            // multiple choice
+            const range_numbers = document.createElement("INPUT");
+            range_numbers.type = "number";
+            range_numbers.min = "2"; // if it were lower you could use checkboxes
+            range_numbers.value = "10";
+            range_numbers.id = "numbers" + question_id_temp;
+            range_numbers.name = range_numbers.id;
+            range_numbers.oninput = () => {
+                if(input_type.type == "range"){
+                    input_type.max = range_numbers.value;
+                };
+            };
+            // button to change input type (between "checkbox" and "range")
+            const button_change_input_type = document.createElement("BUTTON");
+            button_change_input_type.addEventListener('click', () => {
+                change_input_type(question_id_temp);
+                event.preventDefault();
+            });
+            button_change_input_type.innerText = "Change input type";
+            
+            // add the stuff to the paragraph for the question
+            
+            par.appendChild(document.createElement("HR"))
+            par.appendChild(question_input);
+            par.appendChild(button_remove);
+            par.appendChild(document.createElement("BR"));
+            par.appendChild(input_type);
+            par.appendChild(document.createElement("BR"));
+            par.appendChild(range_numbers);
+            par.appendChild(document.createElement("BR"));
+            par.appendChild(button_change_input_type);
+
+            // add the stuff to questions-paragraph
+            document.getElementById("questions").appendChild(par);
+            
+            // change the amount of questions
+            document.getElementById("ids_list").value = question_ids;
+        };
+
+        function change_input_type(question){
+            // between "range" and "checkbox"
+            let input = document.getElementById("type" + question);
+            let numbers  = document.getElementById("numbers" + question);
+
+            if(input.type == "range"){
+                input.type = "checkbox";
+                numbers.hidden = true;
+            }else{
+                input.type = "range";
+                numbers.hidden = false;
+            };
+        };
+
+        // add the button to add questions
+        document.getElementById("paragraph_for_button_to_add_questions").appendChild(document.createElement("BR"));
+        const button = document.createElement("BUTTON");
+        button.innerText = "Add question";
+        button.addEventListener("click", () => {
+            add_question();
+            event.preventDefault();
+        });
+        button.type = "button";
+        document.getElementById("paragraph_for_button_to_add_questions").appendChild(button);
+
+        function on_submit(){
+            let can_continue = true;
+            let temp = document.getElementById("roomname").value;
+
+            if(temp == ""){
+                can_continue = false;
+            }
+
+            if(question_ids.length == 0){
+                can_continue = false;
+            }
+            
+            for(let i = 0; i < question_ids.length; i++){
+                let part = question_ids[i];
+                let temp = document.getElementById("question" + part).value;
+
+                if(temp == ""){
+                    can_continue = false;
+                }
+            }
+
+            if(!can_continue){
+                event.preventDefault();
+            }            
+        }
+    </script>
+{% endblock %}

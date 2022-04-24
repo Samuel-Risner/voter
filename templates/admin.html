@@ -1,0 +1,17 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <br>
+        
+        <p>
+            <input id="password" type="password" placeholder="Please enter admin password." name="password" class="form-control">
+        </p>
+
+        <p>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </p>
+    </form>
+{% endblock %}

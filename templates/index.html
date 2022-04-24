@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <p>
+            <input id="room" type="text" placeholder="Please enter room code." name="room" class="form-control">
+        </p>
+        
+        <p>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </p>
+    </form>
+{% endblock %}

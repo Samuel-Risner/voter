@@ -1,0 +1,17 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+    Saved rooms
+{% endblock %}
+
+{% block content %}
+    <br>
+    
+    {% for f in files %}
+        <p>
+            <a href="/edit room/{{ f }}">
+                {{ f }}
+            </a>
+        </p>
+    {% endfor %}
+{% endblock %}
