@@ -4,7 +4,7 @@ from get_info import get_info
 from admin import Admins
 from save import save_room_wip, load_saved_room, get_saved_rooms, save_ready_room, get_ready_rooms, load_ready_room, get_data
 
-secret_key, admin_password, port, host = get_info()# "cwa.euf.awekfhc.w.ealfwzr347rzrq489rzhl834q9hfdzr84hedafzr4ihdzie4wihduiwe4hfdzwe4ihdf<uilawe", "adminpassword8765", 5000, "localhost", #info
+secret_key, admin_password, port, host = get_info()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = secret_key
